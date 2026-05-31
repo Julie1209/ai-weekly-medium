@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  issues: write
 
 jobs:
   generate-draft:
@@ -27,8 +28,24 @@ jobs:
       - name: Generate draft
         run: python main.py
 
+      - name: Set draft metadata
+        run: |
+          draft_date="$(date -u +%F)"
+          echo "DRAFT_DATE=$draft_date" >> "$GITHUB_ENV"
+          echo "DRAFT_PATH=drafts/ai-weekly-$draft_date.md" >> "$GITHUB_ENV"
+
       - name: Commit generated draft
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Add weekly AI Medium draft"
           file_pattern: drafts/*.md
+
+      - name: Create reminder issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue create \
+            --title "New AI Weekly draft ready: $DRAFT_DATE" \
+            --body "A new Medium Markdown draft was generated at \`$DRAFT_PATH\`.
+
+Review it, add your personal angle, and publish it on Medium when ready."
