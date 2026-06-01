@@ -44,8 +44,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          printf '%s\n\n%s\n' "A new Medium Markdown draft was generated at \`$DRAFT_PATH\`." "Review it, add your personal angle, and publish it on Medium when ready." > issue-body.md
           gh issue create \
             --title "New AI Weekly draft ready: $DRAFT_DATE" \
-            --body "A new Medium Markdown draft was generated at \`$DRAFT_PATH\`.
-
-Review it, add your personal angle, and publish it on Medium when ready."
+            --body-file issue-body.md
