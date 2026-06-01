@@ -2,7 +2,7 @@ name: Weekly AI Medium Draft
 
 on:
   schedule:
-    - cron: "0 9 * * 1"
+    - cron: "30 5 * * 1"
   workflow_dispatch:
 
 permissions:
